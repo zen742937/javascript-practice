@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# 編輯器
+.vscode/
+.idea/
+*.swp
+
+# 套件管理（未來如果用 npm）
+node_modules/
+
+# 環境變數（未來如果用）
+.env
+.env.local
+
+# 紀錄檔
+*.log
