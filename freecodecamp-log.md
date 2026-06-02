@@ -26,3 +26,24 @@
 - （這裡可以自己補上今天印象最深的觀念、卡住的地方，或想之後回頭複習的點）
 
 > 與每日 React 練習並行：React 進度見 day-N / sandbox 資料夾與 Notion；freeCodeCamp 走基礎 JS 補強。
+
+---
+
+## 2026-06-02｜Full Stack Developer 課程：JavaScript 字串方法專章（51 單元）
+
+今天完成 51 個單元，集中在 **字串（String）方法**——把昨天的字串開頭延伸成完整的字串操作，搭配三個邊學邊做的小專案。
+
+### 涵蓋主題
+- **Working with String Character Methods**（Theory）— 取字元 / 索引相關方法
+- **Working with String Search and Slice Methods**（Theory）— 搜尋與切片（如 indexOf / slice 等）
+- **Working with String Formatting Methods**（Theory）— 格式化方法
+- **Working with String Modification Methods**（Theory）— 修改字串的方法
+- **JavaScript Strings**（Review + Quiz）— 字串整章總複習與測驗
+
+### 邊學邊做的小專案
+- **Build a String Inspector**（Workshop）
+- **Build a String Formatter**（Workshop）
+- **Build a String Transformer**（Workshop）
+
+### 心得 / 待補
+- （這裡可以自己補上今天印象最深的字串方法、卡住的地方，或想之後回頭複習的點）
