@@ -2,7 +2,7 @@
 // 沒有新觀念，是把你會的整合起來：map（Day 23）+ 元件拆分（Day 25）+ filter（Day 21/22）+ 狀態提升（Day 26）。
 // 難點：同時套用「兩個篩選條件」（分類 + 搜尋）。
 // 這題就是你二手衣作品商品牆的雛形，做完可以直接延伸。
-// 完成日期：（做完再填）YYYY-MM-DD
+// 完成日期：2026-06-06
 
 const { useState } = React;
 
@@ -25,6 +25,14 @@ const CATEGORIES = ["全部", "上衣", "外套", "褲子"];
 function ProductCard({ product }) {
   // TODO 1：return 一個 <div>，顯示 product 的 name / 價格（NT$）/ 分類 / 尺寸
   //         （排版自由，先能顯示就好）
+  return (
+    <div>
+      <p>{product.name}</p>
+      <p>NT${product.price}</p>
+      <p>分類：{product.category}</p>
+      <p>尺寸：{product.size}</p>
+    </div>
+  )
 }
 
 // ════════════════════════════════════════════════
@@ -34,25 +42,49 @@ function ProductWall() {
   // TODO 2：兩個 state
   //   - keyword：搜尋字（初始 ""）
   //   - selectedCategory：目前選的分類（初始 "全部"）
+  const [keyword,setKeyword] = useState("");
+  const [selectedCategory,setSelectedCategory] = useState("全部");
 
   // TODO 3：算出 filtered —— 同時符合「分類」和「搜尋」兩個條件
   //   分類條件：selectedCategory === "全部" 就全留，否則只留 product.category === selectedCategory
   //   搜尋條件：product.name 包含 keyword（用 includes）
   //   提示：可以 PRODUCTS.filter(...) 一個 filter 裡用 && 把兩個條件串起來
+  const filtered = PRODUCTS.filter(product => {
+    const 分類符合 = selectedCategory === "全部" || product.category === selectedCategory;
+    const 搜尋符合 = product.name.includes(keyword);
+    return 分類符合 && 搜尋符合 
+  })
 
   return (
     <div>
       <h2>我的二手衣</h2>
 
       {/* TODO 4：搜尋框 —— 受控 input，value 綁 keyword、onChange 更新 keyword */}
+      <input value={keyword} onChange={(e)=> setKeyword(e.target.value)}/>
 
       {/* TODO 5：分類按鈕 —— 用 CATEGORIES.map 做出每個分類的 <button>，
           點了就 setSelectedCategory(該分類)。記得 key。 */}
+      
+      {
+        CATEGORIES.map(category => (
+          <button key={category} onClick={()=>setSelectedCategory(category)}>
+            {category}
+          </button>
+        ))
+      }
+
 
       {/* TODO 6：商品列表 —— 用 filtered.map 渲染 <ProductCard />，
           傳 key={...} 和 product={...} */}
 
+      {
+        filtered.map(product => (<ProductCard key={product.id} product={product} />))
+      }
+
       {/* 加分：filtered 是空陣列時，顯示一段「找不到符合的商品」 */}
+      {
+        filtered.length === 0 && <p>找不到符合的商品</p>
+      }
     </div>
   );
 }
