@@ -175,3 +175,18 @@
 
 ### 心得（zen 的筆記）
 > _（待補：這個工作坊用到哪些物件/陣列方法？哪一步卡最久、為什麼？用自己的話寫下來。）_
+
+---
+
+## 2026-06-14｜Full Stack Developer 課程：Cargo Manifest Validator + JSON
+
+今天先做一個實驗室實作，接著進入 **JSON** 章節的理論。
+
+### 完成內容
+- **Build a Cargo Manifest Validator**（Lab／實驗室）— 驗證貨物清單資料
+- **學習 JSON**（Theory／理論）
+  - 什麼是 JSON，以及如何使用括號和點記法存取值
+  - `JSON.parse()` 和 `JSON.stringify()` 如何運作
+
+### 心得（zen 的筆記）
+> _（待補：`JSON.parse()` 與 `JSON.stringify()` 各是「字串↔物件」的哪個方向？JSON 和 JS 物件寫法上有哪些不一樣？用自己的話寫下來。）_
