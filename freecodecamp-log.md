@@ -214,3 +214,22 @@
 
 ### 心得（zen 的筆記）
 > _（待補：這個工作坊整體用物件陣列做了哪些「增 / 查 / 改 / 刪」？哪個方法負責哪一種操作？用自己的話整理一遍。）_
+
+---
+
+## 2026-06-17｜Full Stack Developer 課程：Build a Quiz Game（Lab／實驗室）
+
+今天做 **Build a Quiz Game** 實驗室，用物件陣列建一組測驗題庫，並寫三個函式讓「電腦」隨機作答、再判斷對錯。
+
+### 完成內容
+- **Build a Quiz Game**（Lab）— 全部 user stories 通過 ✅
+  - `questions` 陣列：至少 5 個物件，每個含 `category` / `question` / `choices`（3 個字串）/ `answer`（須包含在 `choices` 內）
+  - `getRandomQuestion(questions)` — 從題庫隨機回傳一題物件
+  - `getRandomComputerChoice(choices)` — 從該題選項隨機回傳一個答案
+  - `getResults(question, computerChoice)` — 答對回傳 `The computer's choice is correct!`，答錯回傳 `The computer's choice is wrong. The correct answer is: <correct-answer>`
+
+### 心得（zen 的筆記）
+> _（待補，給自己三個自我檢查題：_
+> _1. 「隨機取陣列的一個元素」你是怎麼寫的？`Math.random()` × `Math.floor()` × `array.length` 三者各負責什麼？_
+> _2. `getResults` 答錯時的回傳字串，結尾要不要有句點、冒號後面有沒有空格——這種「字串要一字不差」的題目你怎麼確保不出錯？_
+> _3. `answer` 一定要在 `choices` 裡，為什麼這條限制很重要？）_
