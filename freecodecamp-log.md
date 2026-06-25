@@ -283,3 +283,22 @@
 > _1. `for...of` 跑字串時拿到的是「字元」，跑陣列時拿到的是「元素」——那如果今天 `sentence` 傳進來的是一個「句子字串」而不是「單字陣列」，`for...of` 會逐「字元」跑還是逐「單字」跑？這個函式還會正常運作嗎？_
 > _2. `getMatchedWordCount` 裡的 `console.log` 是除錯用的，正式版要不要留？把它拿掉後函式行為會變嗎？_
 > _3. 如果想忽略大小寫（讓 `"Really"` 也算數），這段該怎麼改？））_
+
+---
+
+## 2026-06-25｜for...of 實作練習（字元統計）
+
+延續迴圈練習，今天寫四個統計函式：逐字走訪字串，用 `includes` 分類後累加計數。程式碼存於 `loops-string-count/practice.js`。
+
+### 完成內容
+- `getVowelCount(sentence)` — `for...of` 逐字 + `vowels.includes(char)` 數母音（先 `toLowerCase()`）✅
+- `getConsonantCount(sentence)` — 同上，數子音 ✅
+- `getPunctuationCount(sentence)` — 走訪原字串，用標點字串 `includes` 數標點 ✅
+- `getWordCount(sentence)` — `trim()` 後 `split(" ")` 切單字，跳過空字串累加 ✅
+
+### 心得（zen 的筆記）
+> _（待補，給自己幾個自我檢查題：_
+> _1. 母音/子音的函式都先 `toLowerCase()`，標點那個卻沒有——為什麼標點不需要轉小寫？_
+> _2. `getWordCount` 用 `split(" ")` 切單字：如果兩個字中間打了「兩個空格」，會發生什麼？那段 `if (word !== "")` 是在擋什麼情況？_
+> _3. 連續多個空白、或開頭/結尾有空白時，`split(" ")` 會切出空字串——有沒有比「`split(" ")` + 過濾空字串」更省事的切法？（提示：split 也能吃正規表達式）_
+> _4. 母音和子音的計數，如果改用一個迴圈一次數完兩種，程式會更好還是更難讀？）_
