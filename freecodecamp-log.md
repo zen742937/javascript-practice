@@ -302,3 +302,21 @@
 > _2. `getWordCount` 用 `split(" ")` 切單字：如果兩個字中間打了「兩個空格」，會發生什麼？那段 `if (word !== "")` 是在擋什麼情況？_
 > _3. 連續多個空白、或開頭/結尾有空白時，`split(" ")` 會切出空字串——有沒有比「`split(" ")` + 過濾空字串」更省事的切法？（提示：split 也能吃正規表達式）_
 > _4. 母音和子音的計數，如果改用一個迴圈一次數完兩種，程式會更好還是更難讀？）_
+
+---
+
+## 2026-07-03｜紅綠燈序列模擬器（巢狀迴圈 + 守衛式驗證）
+
+用 config（含 `fault` 與 `phases`）模擬交通號誌。練重點：先用「守衛式驗證（guard clause）」擋掉異常，再進雙層 `for` 跑週期×階段。程式碼存於 `loops-traffic-light/practice.js`。
+
+### 完成內容
+- `runSequence(config, cycles)` — 先擋「無階段 / fault」→ 雙層迴圈跑週期，`duration <= 0` 印 `Invalid phase detected`，否則印切燈訊息 ✅
+- `generateTimeline(config, cycles)` — 累加各階段 `duration` 產生累積時間軸陣列（**故意不做驗證**）✅
+- 驗證分支實測：config2 擋掉 -2、config3 印 fault、config4 印 no phases ✅
+
+### 心得（zen 的筆記）
+> _（待補，給自己幾個自我檢查題：_
+> _1. `runSequence` 把 `phases.length === 0` 和 `fault === true` 這兩個檢查放在迴圈「之前」而不是「之中」——這樣寫（守衛式 early return）比塞在迴圈裡好在哪？_
+> _2. `generateTimeline` 的註解寫「不做任何驗證」。跑 config2 時它回傳 `[3, 1, 7]`——那個 `1` 是怎麼來的？負的 duration 混進累積時間軸，會造成什麼真實世界的 bug？_
+> _3. `runSequence` 會擋 `duration <= 0`，但 `generateTimeline` 不會。如果要讓 `generateTimeline` 也「跳過」無效階段，你會加 `continue` 還是 `if/else`？兩者差在哪？_
+> _4. 兩個函式都用「索引 `for (let j...)`」走 `phases`；換成 `for...of` 會更簡潔嗎？什麼情況下你「非得」用索引不可？）_
