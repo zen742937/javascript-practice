@@ -320,3 +320,20 @@
 > _2. `generateTimeline` 的註解寫「不做任何驗證」。跑 config2 時它回傳 `[3, 1, 7]`——那個 `1` 是怎麼來的？負的 duration 混進累積時間軸，會造成什麼真實世界的 bug？_
 > _3. `runSequence` 會擋 `duration <= 0`，但 `generateTimeline` 不會。如果要讓 `generateTimeline` 也「跳過」無效階段，你會加 `continue` 還是 `if/else`？兩者差在哪？_
 > _4. 兩個函式都用「索引 `for (let j...)`」走 `phases`；換成 `for...of` 會更簡潔嗎？什麼情況下你「非得」用索引不可？）_
+
+---
+
+## 2026-07-06｜找出字串中最長單字的長度
+
+freeCodeCamp 基礎演算法題。用 `split(' ')` 切成單字陣列，`for...of` 逐字比長度，維護一個 `maxLength` 擂台。程式碼存於 `algo-longest-word/practice.js`。
+
+### 完成內容
+- `findLongestWordLength(str)` — 切單字 → 走訪 → 比 `word.length` 更新最大值 → 回傳 ✅
+- 實測："...jumped..." → 6、"...airspeed..." → 8、"May the force be with you" → 5、空字串 → 0 ✅
+
+### 心得（zen 的筆記）
+> _（待補，給自己幾個自我檢查題：_
+> _1. 這個「擂台式求最大值」：`maxLength` 為什麼一開始要設 `0` 而不是隨便一個數？如果題目改成求「最小長度」，初始值還能設 0 嗎？_
+> _2. `split(' ')`（單一空格）遇到「兩個連續空格」會切出空字串 `""`——這題會不會因此出錯？為什麼「求最長」剛好不受影響？（提示：`"".length` 是多少）_
+> _3. 如果不用 for 迴圈，改用 `Math.max(...)` 搭配 `map`，這題能一行寫完嗎？試著寫寫看。_
+> _4. 傳進空字串 `""` 時，`split(' ')` 回傳什麼？為什麼最後還是安全地回傳 0？）_
