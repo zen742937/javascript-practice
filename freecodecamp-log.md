@@ -337,3 +337,24 @@ freeCodeCamp 基礎演算法題。用 `split(' ')` 切成單字陣列，`for...o
 > _2. `split(' ')`（單一空格）遇到「兩個連續空格」會切出空字串 `""`——這題會不會因此出錯？為什麼「求最長」剛好不受影響？（提示：`"".length` 是多少）_
 > _3. 如果不用 for 迴圈，改用 `Math.max(...)` 搭配 `map`，這題能一行寫完嗎？試著寫寫看。_
 > _4. 傳進空字串 `""` 時，`split(' ')` 回傳什麼？為什麼最後還是安全地回傳 0？）_
+
+---
+
+## 2026-07-09｜太空隊員管理（上半部）
+
+freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——加人去重、越界守衛。`swapCrewMembers` 的交換邏輯留到明天下半部。程式碼存於 `crew-manager/practice.js`。
+
+### 完成內容（上半部）
+- `addCrewMember(crew, astronaut)` — 加入前先 for 迴圈掃一遍，`id` 重複就印 `Duplicate ID` 並 return，否則 `push` ✅
+- 用迴圈把 `remainingCrew` 9 人批次加入 → squad 共 10 人 ✅
+- `swapCrewMembers(crew, fromIndex, toIndex)` — **只完成越界守衛**（任一 index < 0 或 >= 長度 → `Invalid crew indices`）；實際交換邏輯 `// TODO` 待 07-10 ⏳
+- 實測：squad.length = 10、`swapCrewMembers(squad, 0, 99)` 正確印出 Invalid crew indices ✅
+
+### 待續（明天下半部）
+- 補 `swapCrewMembers` 的交換：把 `crew[fromIndex]` 與 `crew[toIndex]` 對調。
+> _先想：JS 裡交換兩個陣列元素，用「暫存變數 temp」跟「解構賦值 `[a,b]=[b,a]`」各怎麼寫？_
+
+### 心得（zen 的筆記）
+> _（待補：_
+> _1. `addCrewMember` 用「先掃一遍找重複 id」來去重——這在隊員很多時效率如何？有沒有用 `Set` 或物件當索引更快的做法？_
+> _2. 守衛式驗證把四個越界條件用 `||` 串起來，任一成立就擋——如果改成用 `&&` 會發生什麼？）_
