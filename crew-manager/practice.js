@@ -1,6 +1,6 @@
-// 2026-07-09 freeCodeCamp 練習：太空隊員管理（上半部）
-// 練重點：陣列 + 物件、for 迴圈去重、越界守衛式驗證。
-// 下半部（swapCrewMembers 的實際交換邏輯）預計 2026-07-10 補上。
+// 2026-07-10 freeCodeCamp 練習：太空隊員管理（完成版）
+// 上半部（07-09）：陣列+物件、for 迴圈去重、越界守衛。
+// 下半部（07-10）：swapCrewMembers 實際交換、氣泡排序、EVA 篩選、分組、摘要。
 
 const squad = [];
 
@@ -50,10 +50,61 @@ function swapCrewMembers(crew, fromIndex, toIndex) {
     console.log("Invalid crew indices");
     return;
   }
-  // TODO(2026-07-10 下半部)：實際交換 crew[fromIndex] 與 crew[toIndex]
+
+  const updatedCrew = crew.slice();
+  updatedCrew[fromIndex] = updatedCrew.splice(toIndex, 1, updatedCrew[fromIndex])[0];
+
+  return updatedCrew;
 }
 
-// --- 上半部示範 ---
-console.log("目前隊員數：" + squad.length);
-console.log("隊員名單：" + squad.map((c) => c.name).join(", "));
-swapCrewMembers(squad, 0, 99); // 測越界守衛：應印 Invalid crew indices
+const updatedSquad = swapCrewMembers(squad, 2, 5);
+
+function sortByPriorityDescending(crew) {
+  for (let i = 0; i < crew.length - 1; i++) {
+    for (let j = 0; j < crew.length - 1 - i; j++) {
+      if (crew[j].priority < crew[j + 1].priority) {
+        const temp = crew[j];
+        crew[j] = crew[j + 1];
+        crew[j + 1] = temp;
+      }
+    }
+  }
+}
+
+function getEVAReadyCrew(crew) {
+  const eligible = [];
+  for (const astronaut of crew) {
+    if (astronaut.isEVAEligible) eligible.push(astronaut);
+  }
+  sortByPriorityDescending(eligible);
+
+  return eligible;
+}
+
+const EVAReadySquad = getEVAReadyCrew(updatedSquad);
+
+function chunkCrew(crew, size) {
+  if (size < 1) {
+    console.log("Chunk size must be >= 1");
+    return;
+  }
+
+  const chunks = [];
+  for (let i = 0; i < crew.length; i += size) {
+    chunks.push(crew.slice(i, i + size));
+  }
+
+  return chunks;
+}
+
+const EVAChunks = chunkCrew(EVAReadySquad, 3);
+
+function printCrewSummary(crew) {
+  const sorted = crew.slice();
+  sortByPriorityDescending(sorted);
+  for (const astronaut of sorted) {
+    console.log(astronaut.name);
+  }
+}
+
+printCrewSummary(updatedSquad);
