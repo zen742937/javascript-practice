@@ -34,10 +34,49 @@ function parseCard(rawString) {
   return {
     title: title || "Unknown",
     author: author || "Unknown",
-    year: year,
+    year: year ? parseInt(year) : "Unknown",
     location: location || "Unknown"
   };
 }
 
-const cardResult = parseCard(rawCatalogCards[2]);
-console.log(cardResult);
+function parseCatalog(rawCards) {
+  const catalog = [];
+  for (let i = 0; i < rawCards.length; i++) {
+    catalog.push(parseCard(rawCards[i]));
+  }
+  return catalog;
+}
+
+const catalog = parseCatalog(rawCatalogCards);
+
+function findByAuthor(catalog, author) {
+  const searchTerm = author.toLowerCase();
+  const results = [];
+  for (let i = 0; i < catalog.length; i++) {
+    if (catalog[i].author.toLowerCase().includes(searchTerm)) {
+      results.push(catalog[i]);
+    }
+  }
+  return results;
+}
+
+function groupByDecade(catalog) {
+  const grouped = {};
+  for (let i = 0; i < catalog.length; i++) {
+    const book = catalog[i];
+    if (book.year === "Unknown") {
+      if (!grouped["Unknown"]) {
+        grouped["Unknown"] = [];
+      }
+      grouped["Unknown"].push(book);
+      continue;
+    }
+    const decade = Math.floor(book.year / 10) * 10;
+    const decadeKey = `${decade}s`;
+    if (!grouped[decadeKey]) {
+      grouped[decadeKey] = [];
+    }
+    grouped[decadeKey].push(book);
+  }
+
+}
