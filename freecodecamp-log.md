@@ -545,3 +545,22 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _2. 這題只能抓出「缺一個字母」的情況，如果字串裡缺了兩個連續字母（例如 `"abcf"`，缺了 d、e），`nextCode - currentCode` 會是多少？目前的程式碼回傳的會是哪一個缺字母、還是兩個都抓不到？_
 > _3. `charCodeAt` / `fromCharCode` 這組是字元碼與字元互轉的標準搭配——如果 `str` 裡混了大小寫（例如 `"abcE"`），這題還會正確嗎？大寫和小寫字母的字元碼是連續的嗎？_
 > _4. 這是第四次貼題目沒附自己的測試——GitHub 長草這邊也斷過一天（07-28），兩件事都要開始留意：練習要每天做、做完要自己先測過再貼給我。）
+
+## 2026-07-30｜智慧儲藏室補貨程式（Smart Pantry Restock，freeCodeCamp Lab）
+
+比較目前儲藏室與到貨貨物，決定每個物品要「補貨/丟棄/捐贈」，再依存放區域分組。這是 freeCodeCamp 平台的完整實驗題，18 個測試皆已在平台上通過，本機再跑一次驗證邏輯無誤。程式碼存於 `pantry-restock/practice.js`。
+
+### 完成內容
+- `parseShipment(rawData)` — `split("|")` 切欄位，用 `Set` 追蹤已出現的 `sku` 去重；`zone` 缺省時 `|| "general"`；`qty` 用 `Number()` 轉數字 ✅
+- `planRestock(pantry, shipment)` — 先把 `pantry` 的 `sku` 收進 `Set` 供 O(1) 查詢；依「`qty <= 0` → discard」「`sku` 已在儲藏室 → restock」「其餘 → donate」三段判斷組出 `{ type, item }` 動作陣列 ✅
+- `groupByZone(actions)` — 依 `action.item.zone` 分組成 `{ zone: [actions...] }` ✅
+- `clonePantry(pantry)` — `pantry.map(item => ({ ...item }))`，用 spread 展開做深層複製（陣列本身也是新陣列）✅
+- 整合：`parseShipment` → `clonePantry` → `planRestock` → `groupByZone` → `console.log` 印出結果 ✅
+- 實測（node 跑過）：`general` 分到 A10（restock）、B21（donate）、D43（discard）；`fridge` 分到 C32（donate）、E54（discard），跟手算結果一致 ✅
+
+### 心得（zen 的筆記）
+> _（待補，這題規模比平常大，值得多想幾個：_
+> _1. `planRestock` 用 `pantry.map(item => item.sku)` 建一個 `Set` 再查詢，而不是每次都對 `pantry` 陣列跑 `.find()` 或 `.some()`——如果 `pantry` 有幾千筆資料、`shipment` 也有幾千筆，這兩種寫法的效能差在哪？（提示：`Set.has` 是 O(1)，陣列 `.find` 是 O(n)）_
+> _2. `clonePantry` 用 `{ ...item }` 展開——這是「深層」複製嗎？如果 `item` 裡面某個屬性本身是物件或陣列（例如 `item.tags = ["fresh"]`），spread 展開後 `tags` 這個陣列是複製了一份新的，還是兩邊共用同一個參照？這題測試 16 說「深層複製」，你的寫法真的完全深層嗎？_
+> _3. `groupByZone` 分組的依據是 `action.item.zone`——`item` 是解析後的「貨物」物件，不是「儲藏室」裡原本的物件。如果同一個 `sku` 在儲藏室是 `zone: "fridge"`，但這次到貨的貨物字串沒寫 zone（變成 `"general"`），分組結果會用哪一個 zone？這樣的行為符合你原本的直覺嗎？_
+> _4. 這題把「解析 → 複製保護 → 決策 → 分組 → 輸出」拆成五個各司其職的函式，跟你 07-22 做的 `catalog-parser` 是不是同一種 pipeline 分層思路？你現在看到題目，能不能主動先把資料流切成幾個階段，再逐一寫函式？）
