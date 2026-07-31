@@ -564,3 +564,22 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _2. `clonePantry` 用 `{ ...item }` 展開——這是「深層」複製嗎？如果 `item` 裡面某個屬性本身是物件或陣列（例如 `item.tags = ["fresh"]`），spread 展開後 `tags` 這個陣列是複製了一份新的，還是兩邊共用同一個參照？這題測試 16 說「深層複製」，你的寫法真的完全深層嗎？_
 > _3. `groupByZone` 分組的依據是 `action.item.zone`——`item` 是解析後的「貨物」物件，不是「儲藏室」裡原本的物件。如果同一個 `sku` 在儲藏室是 `zone: "fridge"`，但這次到貨的貨物字串沒寫 zone（變成 `"general"`），分組結果會用哪一個 zone？這樣的行為符合你原本的直覺嗎？_
 > _4. 這題把「解析 → 複製保護 → 決策 → 分組 → 輸出」拆成五個各司其職的函式，跟你 07-22 做的 `catalog-parser` 是不是同一種 pipeline 分層思路？你現在看到題目，能不能主動先把資料流切成幾個階段，再逐一寫函式？）
+
+## 2026-07-31｜校對工具（Proofreader，freeCodeCamp Lab）
+
+分析字陣列，找出非回文字的索引與重複出現的片語。這是 freeCodeCamp 平台的完整實驗題，18 個測試皆已在平台上通過，本機再加測資跑一次驗證。程式碼存於 `proofreader/practice.js`。
+
+### 完成內容
+- `isPalindrome(word)` — `toLowerCase()` 後跟 `split("").reverse().join("")` 反轉字串比對 ✅
+- `findPalindromeBreaks(words)` — 空輸入守衛回傳 `[]`；for 迴圈收集「不是回文」的字的索引 ✅
+- `findRepeatedPhrases(words, phraseLength)` — `phraseLength >= words.length` 守衛；用 `Map` 記錄每個片語（`slice + join(" ")`）出現的所有起始索引，只保留出現超過一次的片語索引，最後排序回傳（支援重疊序列）✅
+- `analyzeTexts(texts, phraseLength)` — 空輸入守衛；`map` 逐個文字彙整成 `{ repeatedPhrases, palindromeBreaks }` ✅
+- 實測（node 跑過）：`["the","cat","sat","the","cat"]` 片語長 2 → `[0,3]`；重疊測試 `["a","a","a"]` → `[0,1]`；回文斷點與多文字彙整皆符合手算 ✅
+
+### 心得（zen 的筆記）
+> _（待補：_
+> _1. `findRepeatedPhrases` 用 `Map` 把每個片語對應到「出現過的索引陣列」，最後篩 `length > 1` 的——這跟你 07-24 mutation 那題心得提過的「用計數結構取代反覆掃描」是不是同一個思路？如果改用兩層 for 迴圈去比對每一對片語，時間複雜度會從 O(n) 變成什麼？_
+> _2. 片語的「相同」是用 `slice(i, i+phraseLength).join(" ")` 組成字串來判斷的——如果某個字本身就含有空格（例如 `["new york", "city"]`），用空格 join 會不會產生「假的」片語邊界、導致誤判？這題測資裡的字都是單字，但這個假設安全嗎？_
+> _3. `isPalindrome` 對空字串 `""` 會回傳什麼？對單一字元 `"a"` 呢？這兩個邊界的行為符合「回文」的定義嗎？_
+> _4. `findPalindromeBreaks` 開頭用 `if (!words || words.length === 0)` 同時擋了 `null`/`undefined` 和空陣列——但 `findRepeatedPhrases` 的守衛只寫了 `phraseLength >= words.length`，沒有先擋 `words` 是 `null` 的情況。如果 `words` 傳進來是 `undefined`，`undefined.length` 會發生什麼事？兩個函式的防禦程度為什麼不一致？_
+> _5. 這題又是「多個小函式組合成 pipeline」的結構（`analyzeTexts` 呼叫另外三個）——連續幾題都是這個模式了，你有沒有開始能在讀題時就預判「這題大概要拆成哪幾個函式」？）
