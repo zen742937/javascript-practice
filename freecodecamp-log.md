@@ -583,3 +583,18 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _3. `isPalindrome` 對空字串 `""` 會回傳什麼？對單一字元 `"a"` 呢？這兩個邊界的行為符合「回文」的定義嗎？_
 > _4. `findPalindromeBreaks` 開頭用 `if (!words || words.length === 0)` 同時擋了 `null`/`undefined` 和空陣列——但 `findRepeatedPhrases` 的守衛只寫了 `phraseLength >= words.length`，沒有先擋 `words` 是 `null` 的情況。如果 `words` 傳進來是 `undefined`，`undefined.length` 會發生什麼事？兩個函式的防禦程度為什麼不一致？_
 > _5. 這題又是「多個小函式組合成 pipeline」的結構（`analyzeTexts` 呼叫另外三個）——連續幾題都是這個模式了，你有沒有開始能在讀題時就預判「這題大概要拆成哪幾個函式」？）
+
+## 2026-08-01｜Reverse a String（字串反轉）
+
+反轉字串的字元順序。freeCodeCamp 經典題，6 個測試皆通過。程式碼存於 `algo-reverse-string/practice.js`。
+
+### 完成內容
+- `reverseString(str)` — `split("")` 拆成字元陣列 → `reverse()` 反轉 → `join("")` 併回字串，一行方法鏈完成 ✅
+- 實測（node 跑過）：`"hello"` → `"olleh"`、`"Howdy"` → `"ydwoH"`、`"Greetings from Earth"` → `"htraE morf sgniteerG"` ✅
+
+### 心得（zen 的筆記）
+> _（待補，這題一行就解掉，重點放在「同一件事的多種寫法」：_
+> _1. `split("").reverse().join("")` 這條方法鏈，三個方法各做了什麼？如果少了最後的 `join("")`，回傳的會是字串還是陣列？_
+> _2. 這題不用內建方法的話，用 for 迴圈怎麼寫？（提示：從字串尾端 `i = str.length - 1` 往前跑，逐字元累加到新字串）自己寫一版迴圈版，對照方法鏈版，理解「宣告式 vs 命令式」的差別。_
+> _3. `split("")` 對含有 emoji 或某些特殊字元的字串（例如 `"a👨‍👩‍👧b"`）反轉會出問題——為什麼？（提示：JS 字串是 UTF-16，一個 emoji 可能佔多個碼元）這是個進階陷阱，知道有這回事就好。_
+> _4. 這題你之前在 `algo-mutation`、`proofreader` 的 `isPalindrome` 裡其實已經用過同樣的 `split/reverse/join` 技巧了——回文判斷本質上就是「字串 === 反轉後的字串」。有沒有發現同一個小技巧在不同題目重複出現？）
