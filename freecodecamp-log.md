@@ -614,3 +614,18 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _2. 這題是雙層迴圈——如果改用內建方法，`arr.map(sub => Math.max(...sub))` 一行也能做到。`Math.max(...sub)` 裡的 `...` 是什麼？為什麼不能直接寫 `Math.max(sub)`？（提示：Math.max 吃的是多個參數，不是一個陣列）_
 > _3. 承上，`map` + `Math.max` 的宣告式寫法 vs 你的雙層 for 命令式寫法，各有什麼好處？擂台法的好處是你完全掌握每一步、面試手寫不會忘；內建法的好處是簡潔。兩種都要會。_
 > _4. 這次你貼過來時平台測試狀態是「等待中」，代表還沒實際送出跑過——雖然這題邏輯是對的，但養成「先在平台按下執行、看到全綠、再貼給我」的習慣，才是完整走完一題。）
+
+## 2026-08-03｜Find Element（找第一個通過測試的元素）
+
+實作 `findElement`，回傳陣列中第一個讓「測試函式」回傳 `true` 的元素，沒有就回傳 `undefined`。這題重點是「函式當引數傳入」（callback / 高階函式）。freeCodeCamp 經典題，8 個測試皆通過。程式碼存於 `algo-find-element/practice.js`。
+
+### 完成內容
+- `findElement(arr, func)` — for 迴圈逐一把元素丟給 `func(arr[i])` 測試，第一個回傳真值的就 `return arr[i]`，跑完都沒過就 `return undefined` ✅
+- 實測（node 跑過，8 組測資皆符合，含空陣列與全部不通過的情況）✅
+
+### 心得（zen 的筆記）
+> _（待補，這題第一次碰到「函式當參數」，值得多想：_
+> _1. `func` 這個參數本身是一個「函式」——`findElement` 在自己內部呼叫 `func(arr[i])`，卻不需要知道 `func` 裡面到底在判斷什麼。這種「把邏輯當資料傳進來」的模式叫高階函式（higher-order function），你覺得它的好處是什麼？（提示：同一個 `findElement` 可以配任意判斷條件重複使用）_
+> _2. 這題其實就是內建 `Array.prototype.find` 的手寫版——`[1,3,5,8].find(num => num % 2 === 0)` 會回傳什麼？跟你手寫的 `findElement` 行為完全一樣嗎？連「找不到回傳 undefined」都一樣嗎？_
+> _3. 你之前在 `catalog-parser` 用過 `findByAuthor`、`pantry-restock` 用過 `map`/`filter` 思路——`map`、`filter`、`find`、`some`、`every` 這一整組都是「吃一個函式當參數」的高階函式。今天這題等於是從零手寫了 `find` 的骨架，回頭看那些內建方法，是不是更有感覺它們內部大概怎麼運作？_
+> _4. `return arr[i]` 一找到就立刻結束整個函式（提早返回）——如果把它改成把結果存到變數、等迴圈跑完再 return，效能上會差在哪？（提示：目標是「第一個」，找到就不必再往後跑））
