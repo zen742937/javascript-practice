@@ -662,3 +662,22 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _3. 你這版朝上、朝下寫了兩個幾乎一樣的 for 迴圈，只差 `numChars` 的算法——能不能想辦法只用一個迴圈、用 `inverted` 這個布林值去切換 `numChars` 的公式，減少重複程式碼？（提示：三元運算子 `inverted ? ... : ...`）_
 > _4. 這題用了 `String.prototype.repeat`——你 07-27 Repeat a String 那題手寫過「重複字串」的迴圈版，現在直接用內建 `repeat` 是不是輕鬆很多？回頭看那題的自我檢查，內建方法和手寫迴圈的取捨你現在更有感覺了嗎？_
 > _5. 「每列結尾不應有任何空格」是這題最容易踩的雷——如果你在字元後面也補了對稱的空格，測試會因為尾空格而失敗。debug 這種「看起來對、但字串不相等」的問題時，用 `JSON.stringify` 把 `\n` 和空格顯示出來逐字比對，是很實用的技巧。）
+
+## 2026-08-06｜Gradebook（成績簿應用程式，freeCodeCamp Lab）
+
+實作四個互相呼叫的函式：算平均、給等第、判斷及格、組出學生訊息。freeCodeCamp 實驗題，26 個測試皆通過。程式碼存於 `gradebook/practice.js`。
+
+### 完成內容
+- `getAverage(scores)` — for 迴圈累加後除以 `length`，回傳平均（number）✅
+- `getGrade(score)` — `if/else if` 階梯：`=== 100` → A+、`>= 90` → A、依序往下到 `else` → F ✅
+- `hasPassingGrade(score)` — 呼叫 `getGrade`，回傳 `!== "F"`（複用既有函式，不重寫判斷）✅
+- `studentMsg(totalScores, studentScore)` — 用 `getAverage` + `getGrade`，依 `hasPassingGrade` 分支組出 passed/failed 訊息 ✅
+- 實測（node 跑過）：含浮點平均 `71.7`/`47.125`/`50.8` 精準對上、六個等第邊界與訊息字串皆一字不差 ✅
+
+### 心得（zen 的筆記）
+> _（待補：_
+> _1. `getGrade` 的 `if/else if` 階梯為什麼「由高到低」排、而且後面幾條可以只寫 `>= 90`、`>= 80` 不用寫 `score >= 90 && score <= 99`？（提示：能走到 `>= 90` 這條，代表前面 `=== 100` 已經擋掉了，所以不必再設上界）這種「靠順序省掉條件」的寫法叫什麼？如果把順序倒過來從 `>= 60` 開始寫，會發生什麼事？_
+> _2. `hasPassingGrade` 沒有自己重寫一套分數判斷，而是「呼叫 `getGrade` 再看是不是 F」——這叫**函式複用（DRY）**。好處是什麼？（提示：哪天及格標準改了，你只要改 getGrade 一個地方）這跟你在 pyramid 那題被提醒「兩個迴圈重複」是同一個主題的正反面。_
+> _3. `studentMsg` 的 passed / failed 兩個 return 字串，其實只有最後一個單字（passed/failed）不同，前半段完全一樣——能不能像 pyramid 心得說的，用三元運算子只寫一次共同部分、只切換不同的字？試著重構成一行 return。_
+> _4. 這題四個函式是「一層疊一層」的呼叫關係：`studentMsg` → `getAverage`/`getGrade`/`hasPassingGrade`，而 `hasPassingGrade` → 又呼叫 `getGrade`。這種「小函式各做一件事、再由上層組合」的結構，跟你 07-30 pantry、07-31 proofreader 的 pipeline 是不是越來越熟悉了？_
+> _5. `getAverage` 回傳的浮點數（如 47.125）剛好都能通過測試——但如果哪天要求「平均四捨五入到小數點兩位」，你會用什麼方法？（提示：`Math.round` 搭配乘除、或 `toFixed`，但注意 `toFixed` 回傳的是字串不是數字））
