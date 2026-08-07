@@ -681,3 +681,20 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _3. `studentMsg` 的 passed / failed 兩個 return 字串，其實只有最後一個單字（passed/failed）不同，前半段完全一樣——能不能像 pyramid 心得說的，用三元運算子只寫一次共同部分、只切換不同的字？試著重構成一行 return。_
 > _4. 這題四個函式是「一層疊一層」的呼叫關係：`studentMsg` → `getAverage`/`getGrade`/`hasPassingGrade`，而 `hasPassingGrade` → 又呼叫 `getGrade`。這種「小函式各做一件事、再由上層組合」的結構，跟你 07-30 pantry、07-31 proofreader 的 pipeline 是不是越來越熟悉了？_
 > _5. `getAverage` 回傳的浮點數（如 47.125）剛好都能通過測試——但如果哪天要求「平均四捨五入到小數點兩位」，你會用什麼方法？（提示：`Math.round` 搭配乘除、或 `toFixed`，但注意 `toFixed` 回傳的是字串不是數字））
+
+## 2026-08-07｜Falsy Bouncer（移除陣列中的假值）
+
+移除陣列裡所有假值（false、null、0、""、undefined、NaN），回傳新陣列且不改動原陣列。freeCodeCamp 經典題，7 個測試皆通過。程式碼存於 `algo-bouncer/practice.js`。
+
+### 完成內容
+- `bouncer(arr)` — for 迴圈逐一檢查，`if (arr[i])` 直接把值當布林判斷，只有真值才 `push` 進新陣列 `result` ✅
+- 用新陣列 `result` 收集，不動原陣列（純函式）✅
+- 實測（node 跑過）：五組測資皆正確，含全假值→`[]`、空陣列→`[]`；額外驗證輸入陣列執行後不變 ✅
+
+### 心得（zen 的筆記）
+> _（待補：_
+> _1. 這題的核心是 `if (arr[i])`——直接把值放進 if 條件，JS 會自動把它轉成布林值判斷（truthy / falsy）。JS 的六個假值你能不看題目背出來嗎？（false、null、0、""、undefined、NaN）除了這六個，其他值（包括 "0"、"false"、[]、{}）全都是真值——`"0"` 是真值這點很容易搞錯，為什麼？_
+> _2. 你手寫的 for + if 版本，其實就是內建 `filter` 的翻版——`arr.filter(Boolean)` 一行就能做到同樣的事。`Boolean` 當作 filter 的 callback 傳進去，等於「每個元素都用 Boolean(元素) 轉布林、真的留下」。想通 `filter(Boolean)` 為什麼會動，你就真的懂高階函式了（呼應 08-03 手寫 find）。_
+> _3. `arr.filter(x => x)` 和 `arr.filter(Boolean)` 兩種寫法效果一樣嗎？前者是「回傳元素本身讓 filter 判斷真假」，後者是「用 Boolean 明確轉布林」——這題的測資下兩者結果相同，但意義上哪個更清楚？_
+> _4. 這題又是「不能改動輸入陣列」的純函式要求——你用新陣列 `result` 收集就天然滿足了。回想 frankenSplice（08-04）要特地 `slice()` 才能保護原陣列，這題為什麼「自然」就不會動到原陣列？（提示：你從頭到尾只有讀 arr[i]、沒有對 arr 做任何寫入）_
+> _5. `NaN` 是假值，但 `NaN === NaN` 是 `false`（NaN 不等於自己）——如果這題不用「轉布林」的方法、而是想手動排除，你要怎麼判斷一個值是不是 NaN？（提示：`Number.isNaN()`，不能用 `=== NaN`）這是個經典陷阱，記進弱項頁複習。）
