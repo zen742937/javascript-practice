@@ -698,3 +698,21 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _3. `arr.filter(x => x)` 和 `arr.filter(Boolean)` 兩種寫法效果一樣嗎？前者是「回傳元素本身讓 filter 判斷真假」，後者是「用 Boolean 明確轉布林」——這題的測資下兩者結果相同，但意義上哪個更清楚？_
 > _4. 這題又是「不能改動輸入陣列」的純函式要求——你用新陣列 `result` 收集就天然滿足了。回想 frankenSplice（08-04）要特地 `slice()` 才能保護原陣列，這題為什麼「自然」就不會動到原陣列？（提示：你從頭到尾只有讀 arr[i]、沒有對 arr 做任何寫入）_
 > _5. `NaN` 是假值，但 `NaN === NaN` 是 `false`（NaN 不等於自己）——如果這題不用「轉布林」的方法、而是想手動排除，你要怎麼判斷一個值是不是 NaN？（提示：`Number.isNaN()`，不能用 `=== NaN`）這是個經典陷阱，記進弱項頁複習。）
+
+## 2026-08-08｜Inventory Manager（庫存管理程式，freeCodeCamp Lab）
+
+用物件陣列做庫存，實作新增、更新、查找、移除產品，全程以小寫 name 比對。freeCodeCamp 實驗題，16 個測試皆通過。程式碼存於 `inventory-manager/practice.js`。
+
+### 完成內容
+- `findProductIndex(productName)` — 先 `toLowerCase()`，for 迴圈找 name 相符的索引，找不到回傳 `-1`（複用於後兩個函式）✅
+- `addProduct(product)` — 已存在 → `quantity +=` 並 log `xxx quantity updated`；不存在 → `push({name, quantity})` 並 log `xxx added to inventory`（存入時 name 統一轉小寫）✅
+- `removeProduct(productName, quantity)` — 三段守衛：查無 → `xxx not found`；庫存不足 → `Not enough...`；正常 → 減量並 log 剩餘量，歸零則 `splice` 移除 ✅
+- 實測（node 跑過）：六種分支（新增/更新/大小寫查找/查無/不足/歸零移除）皆正確，`inventory` 最終狀態符合手算 ✅
+
+### 心得（zen 的筆記）
+> _（待補：_
+> _1. 三個函式都靠 `findProductIndex` 找位置，而不是各自重寫一遍 for 迴圈——這就是你 08-06 gradebook 練到的**函式複用（DRY）**。這裡複用得特別漂亮，因為「找索引」這件事被抽出來後，addProduct / removeProduct 只要專心處理「找到了要幹嘛」。你現在讀題時，能主動判斷「哪段邏輯值得抽成獨立函式」嗎？_
+> _2. 這題全程用「小寫 name」比對與儲存——`findProductIndex` 入口轉、`addProduct` 存入時也轉。為什麼「入口和存入都要轉」缺一不可？如果只有查找時轉、存入時沒轉（存了大寫 "FLOUR"），下次用小寫查會發生什麼事？（提示：資料一致性）_
+> _3. `removeProduct` 用了三個「提早返回（early return）」把 not found / 不足 兩種例外先擋掉，最後才寫正常流程——對照如果用巢狀 if/else 一層包一層，哪種比較好讀？early return 你從 07-27 repeat-string 一路用到現在了。_
+> _4. `inventory[index].quantity += product.quantity` 這行——`inventory[index]` 拿到的是「陣列裡那個物件本人」還是「複製品」？改它會不會真的改到陣列裡的資料？（提示：物件是參照，呼應你 06-29 弱項頁記過的「物件是參照不是複製」）這題正好需要「改到本人」，所以是對的；但要意識到什麼時候這是你要的、什麼時候會誤傷。_
+> _5. 歸零後用 `splice(index, 1)` 移除——這裡的 `splice` 是「原地修改」inventory 本人（呼應 08-04 slice/splice 弱項頁那條）。這題 inventory 是共用狀態、本來就該原地改，跟 frankenSplice 要「保護原陣列」的情境剛好相反。同一個方法，用對場合。）
