@@ -733,3 +733,20 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _3. 承上，如果改用 `Set` 來記「看過的值」、但又要維持「首次出現順序」，你會怎麼寫？（提示：Set 負責 O(1) 判重、result 陣列負責記順序，兩個搭配用）_
 > _4. 這題「保留首次出現、去重」的需求，跟你 07-17 catalog-parser 裡 `parseCard`/`parseShipment` 用 Set 去重 sku 是不是同一類問題？「去重並保序」是很常見的模式，值得記成一個你認得出來的題型。_
 > _5. 有沒有更短的寫法？`[].concat(...arrs)` 先把所有陣列合成一個，再用 `filter` + `indexOf`（或 Set）去重——想想看一行版大概長怎樣，理解「先攤平再去重」和你「邊走邊去重」兩種思路的差別。）
+
+## 2026-08-10｜Password Generator（隨機密碼產生器，freeCodeCamp Lab）
+
+用 `Math.random` 從字元集隨機取字元，組出指定長度的密碼。freeCodeCamp 實驗題，10 個測試皆通過。程式碼存於 `algo-password-generator/practice.js`。
+
+### 完成內容
+- `generatePassword(length)` — for 迴圈跑 `length` 次，每次 `Math.floor(Math.random() * chars.length)` 算出隨機索引、`chars[randomIndex]` 取字元串接 ✅
+- `password` 變數存 `generatePassword(12)` 結果，用模板字串 log 出 `Generated password: xxx` ✅
+- 實測（node 連跑三次）：每次都產出不同的 12 字元密碼、字元皆落在字元集內（大小寫/數字/符號都可能出現）✅
+
+### 心得（zen 的筆記）
+> _（待補：_
+> _1. `Math.floor(Math.random() * chars.length)` 這個「隨機索引」公式要拆開看：`Math.random()` 回傳 `[0, 1)`（含 0、不含 1）的小數 → 乘上 `chars.length` 變成 `[0, length)` → `Math.floor` 無條件捨去成整數。為什麼一定要用 `Math.floor` 而不是 `Math.round`？（提示：用 round 的話，頭尾兩個索引被選中的機率會跟中間不一樣，分布不均）_
+> _2. 承上，為什麼是「不含 1」很重要？如果 `Math.random()` 有可能回傳剛好 1.0，`Math.floor(1 * chars.length)` 會算出 `chars.length`——這個索引會發生什麼事？（提示：陣列/字串最大合法索引是 length - 1，取 chars[length] 會拿到 undefined）幸好 random 永遠 < 1，天然避開了這個越界。_
+> _3. 這題的密碼「無法保證一定同時包含大寫+小寫+數字+符號」——因為每個字元都是純隨機，理論上可能 12 個字元剛好全是數字。如果需求改成「必須至少各含一個」，你會怎麼改？（這是常見的進階題，先想想思路就好）_
+> _4. `Math.random()` 產生的是「偽隨機」，不適合用在真正需要安全性的密碼（真實產品會用 `crypto.getRandomValues`）——但這題是練習 Math 方法，用 `Math.random` 剛好。知道有這個區別就好。_
+> _5. 這題你把「隨機取一個索引」的公式 `Math.floor(Math.random() * 長度)` 練起來了——這個公式之後超常用：洗牌、抽籤、隨機挑陣列元素、擲骰子都靠它。記成一個你隨手能寫的工具。）
