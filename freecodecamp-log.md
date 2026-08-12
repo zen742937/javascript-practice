@@ -766,3 +766,19 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _2. 這題有個數學捷徑：連續整數 min 到 max 的總和 = `(min + max) * (項數) / 2`，項數是 `max - min + 1`。用這個公式一行就能算完、不用迴圈——你能套進去寫成 `return (min + max) * (max - min + 1) / 2` 嗎？自己驗算 `[1,4]`：`(1+4)*(4-1+1)/2 = 5*4/2 = 10` ✓。這叫高斯求和公式。_
 > _3. 承上，迴圈版 O(n)（區間多大就跑多少次）vs 公式版 O(1)（不管區間多大都一步算完）——如果是 `sumAll([1, 1000000])`，兩種寫法的效能差多少？大部分情況迴圈版夠用、也好讀，但知道有 O(1) 解法是加分。_
 > _4. `Math.min(arr[0], arr[1])` 這裡是傳兩個參數——如果哪天是「整個陣列找最小」，`Math.min(arr)` 為什麼不行？要怎麼寫？（提示：`Math.min(...arr)` 用 spread 展開，呼應你 08-02 largestOfAll 心得和 08-09 的 `...` 主題））
+
+## 2026-08-12｜DNA Pairing（鹼基配對）
+
+把 DNA 字串的每個鹼基配上它的互補鹼基（A↔T、C↔G），回傳二維陣列。freeCodeCamp 經典題，5 個測試皆通過。程式碼存於 `algo-pair-element/practice.js`。
+
+### 完成內容
+- `pairElement(str)` — 用「查找物件」`pairs`（`{A:"T", T:"A", C:"G", G:"C"}`）當對照表，取代一堆 if/else ✅
+- `str.split("").map(char => [char, pairs[char]])` — split 拆字元、map 把每個字元轉成 `[原鹼基, 配對鹼基]` 的小陣列，一行完成 ✅
+- 實測（node 跑過，`JSON.stringify` 逐字元比對）：三組測資皆一字不差 ✅
+
+### 心得（zen 的筆記）
+> _（待補，這題寫得很漂亮，重點放在「為什麼這樣寫好」：_
+> _1. 你用「查找物件」`pairs` 代替 `if(char==="A") return "T"; else if...` 四段判斷——這叫 **lookup table / 查找表**模式。好處是什麼？（提示：如果哪天鹼基種類變多，只要往物件加一筆，不用改邏輯；而且 `pairs[char]` 是 O(1) 直接命中，不用逐條比對）這跟你 08-06 gradebook 的 `getGrade` 用 if/else 階梯是兩種風格——什麼情況適合查找表、什麼情況適合 if 階梯？（提示：離散對應 vs 範圍判斷）_
+> _2. `split("").map(...)` 這條鏈你已經很熟了——split 拆成字元陣列、map 逐一轉換。回想 08-01 reverseString 的 `split/reverse/join`、08-07 bouncer 想過的 filter，這些「拆開→逐一處理→組回去」的方法鏈是不是越用越順手？_
+> _3. `map` 回傳的每個元素這次是「一個小陣列 `[char, pairs[char]]`」，所以最後得到「陣列的陣列」（二維陣列）——map 的 callback 回傳什麼，新陣列的每格就是什麼。如果 callback 改成回傳物件 `{base: char, pair: pairs[char]}`，結果會變成什麼形狀？_
+> _4. `pairs[char]` 用的是「中括號存取」而不是「點存取」（`pairs.char`）——為什麼這裡一定要用中括號？（提示：`char` 是變數，值是 "A"/"T"...；`pairs.char` 會去找一個「字面上叫 char」的屬性，那不存在）這是物件存取的經典分野，記進弱項頁複習。）
