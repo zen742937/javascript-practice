@@ -832,3 +832,25 @@ freeCodeCamp 練習：用陣列存隊員（物件）。今天做上半部——�
 > _3. 對照「手寫迴圈版」：你也可以用 for 迴圈跑到第一個 `func(arr[i])` 為 true 就 `return arr.slice(i)`、跑完沒中就 `return []`。跟你的 findIndex 版比，哪個好讀？哪個更能看出「在做什麼」？（兩種都要會：面試手寫可能要迴圈版，實務簡潔用 findIndex 版）_
 > _4. `slice(index)` 只給一個參數（不給結束點）——代表「從 index 一路切到結尾」。回想 08-04 frankenSplice 也用過 slice，那次是 `slice()` 不給參數（複製整個）。slice 的兩種常用形態：`slice()` 全複製、`slice(start)` 從某點到底、`slice(start, end)` 取中間段，你現在三種都碰過了。_
 > _5. 這題的名字叫 dropElements，行為是「丟掉開頭一段」——這其實對應到某些語言/函式庫的 `dropWhile`（一直丟到條件不成立）。你這題是「丟到條件『成立』就停」，方向剛好相反。知道有 dropWhile / takeWhile 這類「條件式切割」的家族就好。）
+
+## 2026-08-18｜Playlist Remix Engine（播放清單混音引擎，freeCodeCamp Lab）
+
+把多個聽眾的播放清單合併、評分、去重、限制歌手出現次數，最後排出播放順序。這是這系列最大的 pipeline lab，六個函式串成一條資料處理鏈，14 個測試皆通過。程式碼存於 `playlist-remix/practice.js`。
+
+### 完成內容（六函式 pipeline）
+- `flattenPlaylists(playlists)` — 先 `Array.isArray` 守衛（非陣列回 `[]`），雙層 `forEach` 攤平，每首曲目用 `...track` 展開再加 `source: [播放清單索引, 曲目索引]` ✅
+- `scoreTracks(tracks)` — `map` 為每首算 `score = votes*10 - Math.abs(bpm-120)`，用 `...track` 保留原屬性再加 score ✅
+- `dedupeTracks(tracks)` — `Set` 記已見過的 trackId，只留第一次出現（呼應 08-09 unite-unique 的去重保序）✅
+- `enforceArtistQuota(tracks, maxPerArtist)` — 用物件 `artistCounts` 當計數器，每位歌手達上限就跳過，保留最早出現 ✅
+- `buildSchedule(tracks)` — `map` 轉成 `{ slot: index+1, trackId }`，slot 從 1 起 ✅
+- `remixPlaylist(playlists, maxPerArtist)` — 依序串起前五個函式，資料一路傳遞 ✅
+- 實測（node 跑過，逐階段驗證）：非陣列→`[]`、source `[0,0]`/`[1,1]`、score 48/32、去重 6→5、Velvet Comet 限 1 剩 1、`remixPlaylist(playlists,1)` 正確踢掉第二首 Velvet Comet ✅
+
+### 心得（zen 的筆記）
+> _（待補，這題是你這系列的集大成，值得好好回顧：_
+> _1. 這條 pipeline 是你從 07-22 catalog-parser、07-30 pantry、07-31 proofreader、08-06 gradebook 一路練的「小函式各做一件事、上層串起來」的**最終形態**——六個函式每個只負責一個轉換步驟，`remixPlaylist` 只是把它們依序接起來。你有沒有發現：只要每個小函式都「輸入一個陣列、輸出一個陣列」，它們就能像水管一樣接在一起？這叫**資料轉換 pipeline**。_
+> _2. 這題每個函式都「回傳新陣列/新物件」而不改輸入——`...track` 展開複製、`map` 產新陣列、`result` 另存。這是你一路練的**純函式 / 不可變（immutability）**主題的大集合。為什麼 pipeline 特別需要「不改上一步的資料」？（提示：如果 scoreTracks 偷改了 flattenPlaylists 的輸出，debug 時你會很難追是哪一步動了手腳）_
+> _3. 去重用 `Set`（dedupeTracks）、計數用「物件當 map」（enforceArtistQuota）——這兩個「用資料結構輔助」的技巧你分別在 07-24 mutation、08-09 unite-unique 想過。這題兩個一起用：Set 適合「看過沒」（只需存在性），物件/Map 適合「看過幾次」（要存數量）。什麼時候用哪個，你現在分得出來嗎？_
+> _4. `enforceArtistQuota` 用 `artistCounts[track.artist] || 0` 拿目前次數——這個 `|| 0` 是處理「第一次遇到這位歌手時 artistCounts[artist] 是 undefined」。呼應你 07-20 catalog / 07-30 pantry 的 `|| "general"` 預設值技巧。但這裡如果哪天次數可以是 0 又有意義，`|| 0` 會不會有 07-22 心得提過的「0 是 falsy」陷阱？（這題不會，因為 count 不會是 0 還要用，但值得警覺）_
+> _5. `buildSchedule` 的 `slot: index + 1`——為什麼要 +1？因為陣列索引從 0 起、但播放順序（slot）要從 1 起給人看。這種「內部 0-based、對外 1-based」的轉換很常見（頁碼、排名、樓層…）。_
+> _6. 你這題一次寫對六個函式 + 主串接，還全過 14 測試——這是你這一個多月從「單一迴圈」練到「多函式協作」的實力證明。回頭看 07-17 你還在寫 parseCard 的第一版，現在能獨力完成這種規模的 pipeline，進步很具體。）
